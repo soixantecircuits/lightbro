@@ -13,25 +13,29 @@ var universe = dmx.addUniverse('usb-to-dmx', 'enttec-open-usb-dmx', '/dev/ttyUSB
 
 let pingpong = () => {
   console.log("bang on")  
-  universe.update({0: 255, 1: 255, 2:255, 3:255, 4:255})
+  //universe.update({0: 255, 1: 255, 2:255, 3:255, 4:255})
+  universe.update({0: 255})
   setTimeout(()=>{
-    universe.update({0: 0, 1: 0, 2:0, 3:0, 4:0})
+    universe.update({0: 0})
   }, 100)
   
   setTimeout(()=>{
     console.log("bang off")
-    universe.update({0: 255, 1: 255, 2:255, 3:255, 4:255})
+    universe.update({0: 255})
     setTimeout(()=>{
-      universe.update({0: 0, 1: 0, 2:0, 3:0, 4:0})
+      universe.update({0: 0})
     }, 100)
   }, 1000 * 5)    
 }
 
 let bang = (channel, value) => {
   console.log('bang', channel, value)
-  universe.update({channel:value})
+  let upgrade = {}
+  upgrade[channel] = value
+  universe.update(upgrade)
   setTimeout(()=>{
-    universe.update({channel: 0})
+    upgrade[channel] = 0
+    universe.update(upgrade)
   }, 100)
 }
 
@@ -62,3 +66,7 @@ const client = new SpacebroClient({
   //pingpong()
 
   //setInterval(pingpong, 10000)
+
+  /*setInterval(()=>{
+    bang(0, 255)
+  }, 5000)*/
